@@ -12,11 +12,11 @@ goto :eof
 :InstallIt
 if not exist "C:\Users\david\AppData\Roaming\ThredrDB" mkdir "C:\Users\david\AppData\Roaming\ThredrDB"
 echo Downloading update...
-powershell.exe -Command "(New-Object System.Net.WebClient).DownloadFile('C:\Users\david\source\repos\THREDrSetup\THREDrDB-v1.0.5.zip', '%TEMP%\THREDrDB-v1.0.5.zip')" || goto :Error
+powershell.exe -Command "(New-Object System.Net.WebClient).DownloadFile('C:\Users\david\source\repos\THREDrSetup\THREDrDB-v1.0.6.zip', '%TEMP%\THREDrDB-v1.0.6.zip')" || goto :Error
 echo Extracting update...
-powershell.exe -Command "Expand-Archive -Path '%TEMP%\THREDrDB-v1.0.5.zip' -DestinationPath 'C:\Users\david\AppData\Roaming\ThredrDB' -Force" || goto :Error
+powershell.exe -Command "Expand-Archive -Path '%TEMP%\THREDrDB-v1.0.6.zip' -DestinationPath 'C:\Users\david\AppData\Roaming\ThredrDB' -Force" || goto :Error
 echo Cleaning up...
-del "%TEMP%\THREDrDB-v1.0.5.zip" > nul 2>&1
+del "%TEMP%\THREDrDB-v1.0.6.zip" > nul 2>&1
 echo Registering THREDrDB add-in with Excel...
 echo Set objExcel = CreateObject("Excel.Application") > "%TEMP%\RegisterXLL.vbs"
 echo objExcel.Visible = True >> "%TEMP%\RegisterXLL.vbs"
