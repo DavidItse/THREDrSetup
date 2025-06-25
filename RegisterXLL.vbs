@@ -1,13 +1,14 @@
 On Error Resume Next
 Set objExcel = CreateObject("Excel.Application")
 Set WShell = CreateObject("WScript.Shell")
+appDataFolder = WShell.ExpandEnvironmentStrings("%APPDATA%")
 If Err.Number <> 0 Then
     WScript.Echo "Error: Could not create Excel instance. Please ensure Excel is installed."
     WScript.Quit 1
 End If
 objExcel.Visible = True
 objExcel.Workbooks.Add
-Set addIn1 = objExcel.AddIns.Add(WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\ThredrDB_add-in-AddIn64-packed.xll")
+Set addIn1 = objExcel.AddIns.Add(appDataFolder & "\ThredrDB\ThredrDB_add-in-AddIn64-packed.xll")
 If Err.Number <> 0 Then
     WScript.Echo "Error: Failed to register the THREDrDB add-in. Ensure the XLL file exists and you have permissions."
 End If
@@ -15,7 +16,7 @@ addIn1.Installed = True
 If Err.Number <> 0 Then
     WScript.Echo "Error: Failed to enable the THREDrDB add-in. Ensure you have permissions to modify Excel settings."
 End If
-Set addIn2 = objExcel.AddIns.Add(WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\ExcelDna.IntelliSense64.xll")
+Set addIn2 = objExcel.AddIns.Add(appDataFolder & "\ThredrDB\ExcelDna.IntelliSense64.xll")
 If Err.Number <> 0 Then
     WScript.Echo "Error: Failed to register the IntelliSense add-in. Ensure the XLL file exists and you have permissions."
 End If
@@ -39,9 +40,9 @@ Next
 On Error Resume Next
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 
-WScript.Echo WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\Checksum.txt"
-objFSO.DeleteFile WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\Checksum.txt"
-objFSO.DeleteFile WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\ComputedChecksum.txt"
+WScript.Echo appDataFolder & "\ThredrDB\Checksum.txt"
+objFSO.DeleteFile appDataFolder & "\ThredrDB\Checksum.txt"
+objFSO.DeleteFile appDataFolder & "\ThredrDB\ComputedChecksum.txt"
 If Err.Number <> 0 Then
 	WScript.Echo "\ThredrDB\Checksum.txt"
     WScript.Echo "Error deleting file: " & Err.Description
