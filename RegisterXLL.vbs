@@ -1,5 +1,6 @@
 On Error Resume Next
 Set objExcel = CreateObject("Excel.Application")
+Set WShell = CreateObject("WScript.Shell")
 If Err.Number <> 0 Then
     WScript.Echo "Error: Could not create Excel instance. Please ensure Excel is installed."
     WScript.Quit 1
@@ -37,7 +38,7 @@ For Each addIn In objExcel.AddIns
 Next
 On Error Resume Next
 Set objFSO = CreateObject("Scripting.FileSystemObject")
-Set WShell = CreateObject("WScript.Shell")
+
 WScript.Echo WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\Checksum.txt"
 objFSO.DeleteFile WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\Checksum.txt"
 objFSO.DeleteFile WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\ComputedChecksum.txt"
@@ -52,6 +53,7 @@ Set objFSO = Nothing
 objExcel.ActiveWorkbook.Saved = True
 objExcel.ActiveWorkbook.Close(False)
 objExcel.Quit
+set WShell = Nothing
 On Error Resume Next
 
 ' Create a WMI service object
