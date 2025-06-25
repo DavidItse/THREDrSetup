@@ -37,9 +37,12 @@ For Each addIn In objExcel.AddIns
 Next
 On Error Resume Next
 Set objFSO = CreateObject("Scripting.FileSystemObject")
+Set WShell = CreateObject("WScript.Shell")
+WScript.Echo WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\Checksum.txt"
 objFSO.DeleteFile WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\Checksum.txt"
 objFSO.DeleteFile WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\ComputedChecksum.txt"
 If Err.Number <> 0 Then
+	WScript.Echo "\ThredrDB\Checksum.txt"
     WScript.Echo "Error deleting file: " & Err.Description
     Err.Clear
 Else
