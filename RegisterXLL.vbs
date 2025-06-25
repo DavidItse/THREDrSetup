@@ -6,7 +6,7 @@ If Err.Number <> 0 Then
 End If
 objExcel.Visible = True
 objExcel.Workbooks.Add
-Set addIn1 = objExcel.AddIns.Add("C:\Users\david\AppData\Roaming\ThredrDB\ThredrDB_add-in-AddIn64-packed.xll")
+Set addIn1 = objExcel.AddIns.Add(WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\ThredrDB_add-in-AddIn64-packed.xll")
 If Err.Number <> 0 Then
     WScript.Echo "Error: Failed to register the THREDrDB add-in. Ensure the XLL file exists and you have permissions."
 End If
@@ -14,7 +14,7 @@ addIn1.Installed = True
 If Err.Number <> 0 Then
     WScript.Echo "Error: Failed to enable the THREDrDB add-in. Ensure you have permissions to modify Excel settings."
 End If
-Set addIn2 = objExcel.AddIns.Add("C:\Users\david\AppData\Roaming\ThredrDB\IntelliSense64.xll")
+Set addIn2 = objExcel.AddIns.Add(WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\IntelliSense64.xll")
 If Err.Number <> 0 Then
     WScript.Echo "Error: Failed to register the IntelliSense add-in. Ensure the XLL file exists and you have permissions."
 End If
@@ -35,6 +35,17 @@ For Each addIn In objExcel.AddIns
     End If
     Exit For
 Next
+On Error Resume Next
+Set objFSO = CreateObject("Scripting.FileSystemObject")
+objFSO.DeleteFile WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\Checksum.txt"
+objFSO.DeleteFile WShell.ExpandEnvironmentStrings("%APPDATA%") & "\ThredrDB\ComputedChecksum.txt"
+If Err.Number <> 0 Then
+    WScript.Echo "Error deleting file: " & Err.Description
+    Err.Clear
+Else
+    WScript.Echo "File deleted successfully."
+End If
+Set objFSO = Nothing
 objExcel.ActiveWorkbook.Saved = True
 objExcel.ActiveWorkbook.Close(False)
 objExcel.Quit
