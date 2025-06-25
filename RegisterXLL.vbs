@@ -35,4 +35,33 @@ For Each addIn In objExcel.AddIns
     End If
     Exit For
 Next
+objExcel.ActiveWorkbook.Saved = True
+objExcel.ActiveWorkbook.Close(False)
 objExcel.Quit
+On Error Resume Next
+
+' Create a WMI service object
+Set objWMIService = GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\cimv2")
+
+' Query all running processes where the name is "excel.exe"
+Set colProcesses = objWMIService.ExecQuery("Select * from Win32_Process Where Name = 'excel.exe'")
+
+' Check if any Excel processes were found
+If colProcesses.Count = 0 Then
+    'WScript.Echo "No Excel processes are running."
+Else
+    ' Loop through each Excel process and terminate it
+    For Each objProcess in colProcesses
+        objProcess.Terminate()
+        If Err.Number = 0 Then
+            'WScript.Echo "Terminated Excel process with PID: " & objProcess.ProcessID
+        Else
+            'WScript.Echo "Failed to terminate Excel process with PID: " & objProcess.ProcessID & ". Error: " & Err.Description
+            Err.Clear
+        End If
+    Next
+End If
+
+' Clean up
+Set colProcesses = Nothing
+Set objWMIService = Nothing
